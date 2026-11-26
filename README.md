@@ -8,7 +8,7 @@ Esta carpeta contiene únicamente la interfaz web (`index.html`, `login.html`, `
 - `js/comun.js`: Contiene la función `api(ruta, opciones)` que realiza las peticiones `fetch()` hacia `${API_BASE_URL}/api/...` adjuntando el token de sesión (`Authorization: Bearer <token>`).
 - `js/login.js`: Envía `POST /api/auth/login`, guarda el token recibido en `sessionStorage` y redirige a `index.html`.
 - `js/panel.js`: Consulta `GET /api/auth/me`, `GET /api/dashboard` y `POST /api/auth/logout`.
-- `js/habitaciones.js` (página `habitaciones.html`): Consulta `GET /api/habitaciones` y `GET /api/habitaciones/historial`, cambia el estado con `PATCH /api/habitaciones/estado` y vuelve a consultar la base para verificar que el cambio quedó guardado. Estilos en `css/habitaciones.css`.
+- `js/habitaciones.js` (página `habitaciones.html`): Busca con `GET /api/habitaciones?q=`, agrega con `POST /api/habitaciones`, elimina con `DELETE /api/habitaciones?numero=&version=`, edita datos con `PATCH /api/habitaciones`, consulta `GET /api/habitaciones/historial`, cambia el estado con `PATCH /api/habitaciones/estado` y vuelve a consultar la base para verificar que el cambio quedó guardado. Estilos en `css/habitaciones.css`.
 
 ## Cómo subirlo a GitHub Pages
 

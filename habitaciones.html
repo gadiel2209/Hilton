@@ -44,6 +44,7 @@
         <div class="acciones">
           <small id="actualizado" class="muted"></small>
           <button id="btn-actualizar" class="btn-secundario">↻ Actualizar</button>
+          <button id="btn-agregar" class="btn-agregar" hidden>+ Agregar habitación</button>
         </div>
       </section>
 
@@ -52,8 +53,22 @@
         <div><strong>No se pudieron cargar las habitaciones</strong><p id="error-mensaje"></p></div>
       </div>
 
-      <section class="seccion filtros" aria-label="Filtros">
+      <section class="seccion filtros" aria-label="Buscar y filtrar">
+        <div class="buscador">
+          <label for="buscar" class="visualmente-oculto">Buscar por número de habitación</label>
+          <span class="buscador-icono" aria-hidden="true">⌕</span>
+          <input id="buscar" type="search" inputmode="numeric" maxlength="3" autocomplete="off"
+                 placeholder="Buscar número: 2, 21 o 214" />
+        </div>
         <div id="filtro-estados" class="filtro-estados" role="group" aria-label="Filtrar por estado"></div>
+        <label class="filtro-piso">
+          <span>Tipo</span>
+          <select id="filtro-tipo">
+            <option value="">Todos</option>
+            <option value="king">King</option><option value="doble_queen">Doble queen</option>
+            <option value="suite">Suite</option><option value="accesible">Accesible</option>
+          </select>
+        </label>
         <label class="filtro-piso">
           <span>Piso</span>
           <select id="filtro-piso">
@@ -99,10 +114,84 @@
       <button id="btn-guardar" class="btn-primario" type="submit" disabled>Guardar cambio</button>
     </form>
 
+    <details id="seccion-editar" class="editar-datos" hidden>
+      <summary>Editar o eliminar habitación</summary>
+      <form id="form-editar" class="form-datos" novalidate>
+        <p class="muted pequeno">El número y el piso no se cambian: el historial y otros registros dependen de ellos.</p>
+        <div class="campos-fila">
+          <label class="campo"><span>Tipo</span>
+            <select id="ed-tipo">
+              <option value="king">King</option><option value="doble_queen">Doble queen</option>
+              <option value="suite">Suite</option><option value="accesible">Accesible</option>
+            </select>
+          </label>
+          <label class="campo"><span>Capacidad</span><input id="ed-capacidad" type="number" min="1" max="6" step="1" /></label>
+          <label class="campo"><span>Etiqueta NFC</span><input id="ed-nfc" type="text" maxlength="8" placeholder="Sin etiqueta" autocomplete="off" /></label>
+        </div>
+        <div id="ed-alerta" class="alerta" role="alert" hidden>
+          <span class="alerta-icono" aria-hidden="true">⚠</span>
+          <div><strong id="ed-alerta-titulo"></strong><p id="ed-alerta-mensaje"></p></div>
+        </div>
+        <button id="btn-guardar-datos" class="btn-secundario" type="submit">Guardar datos</button>
+      </form>
+
+      <div class="zona-eliminar">
+        <h3>Eliminar habitación</h3>
+        <p class="muted pequeno">La habitación sale del catálogo. Su historial de cambios se conserva como auditoría.
+          No se puede eliminar si está ocupada o en limpieza, ni si tiene una limpieza asignada, incidencias abiertas, un sensor instalado o un huésped esperándola.
+          Si solo debe dejar de usarse, mejor bloquéala.</p>
+        <label class="campo">
+          <span id="el-etiqueta">Escribe el número de la habitación para confirmar</span>
+          <input id="el-confirmar" type="text" inputmode="numeric" maxlength="3" autocomplete="off" />
+        </label>
+        <div id="el-alerta" class="alerta" role="alert" hidden>
+          <span class="alerta-icono" aria-hidden="true">⚠</span>
+          <div><strong id="el-alerta-titulo"></strong><p id="el-alerta-mensaje"></p></div>
+        </div>
+        <button id="btn-eliminar" class="btn-peligro" type="button" disabled>Eliminar habitación</button>
+      </div>
+    </details>
+
     <section class="dlg-historial">
       <h3>Últimos cambios guardados</h3>
       <ol id="historial" class="historial"></ol>
     </section>
+  </dialog>
+
+  <!-- Alta de habitación (solo Administración) -->
+  <dialog id="dlg-alta" class="dlg" aria-labelledby="alta-titulo">
+    <form method="dialog" class="dlg-cerrar-form"><button class="dlg-cerrar" aria-label="Cerrar">✕</button></form>
+    <header class="dlg-cabecera">
+      <h2 id="alta-titulo">Agregar habitación</h2>
+      <p class="muted">El piso se toma del número: la 124 queda en el piso 1.</p>
+    </header>
+    <form id="form-alta" class="form-datos" novalidate>
+      <div class="campos-fila">
+        <label class="campo"><span>Número</span><input id="al-numero" type="text" inputmode="numeric" maxlength="3" placeholder="ej. 124" required /></label>
+        <label class="campo"><span>Tipo</span>
+          <select id="al-tipo">
+            <option value="king">King</option><option value="doble_queen">Doble queen</option>
+            <option value="suite">Suite</option><option value="accesible">Accesible</option>
+          </select>
+        </label>
+        <label class="campo"><span>Capacidad</span><input id="al-capacidad" type="number" min="1" max="6" step="1" value="2" /></label>
+      </div>
+      <div class="campos-fila">
+        <label class="campo"><span>Etiqueta NFC <small class="muted">(opcional)</small></span><input id="al-nfc" type="text" maxlength="8" placeholder="ej. 04A1B2C3" autocomplete="off" /></label>
+        <label class="campo"><span>Empieza como</span>
+          <select id="al-estado"><option value="lista">Lista</option><option value="bloqueada">Bloqueada</option></select>
+        </label>
+      </div>
+      <label id="al-campo-motivo" class="campo" hidden>
+        <span>Motivo del bloqueo</span>
+        <input id="al-motivo" type="text" maxlength="200" placeholder="ej. Remodelación de baño" />
+      </label>
+      <div id="alta-alerta" class="alerta" role="alert" hidden>
+        <span class="alerta-icono" aria-hidden="true">⚠</span>
+        <div><strong id="alta-alerta-titulo"></strong><p id="alta-alerta-mensaje"></p></div>
+      </div>
+      <button id="btn-alta" class="btn-primario" type="submit">Agregar habitación</button>
+    </form>
   </dialog>
 
   <div id="aviso" class="aviso" role="status" aria-live="polite" hidden></div>
