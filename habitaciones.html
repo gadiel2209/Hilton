@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Habitaciones · HGI Operaciones</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/estilos.css" />
+  <link rel="stylesheet" href="css/habitaciones.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="barra">
+      <div class="barra-marca">
+        <span class="marca-sello chico">HGI · MTY</span>
+        <div>
+          <strong>Operaciones del hotel</strong>
+          <small>Monterrey Aeropuerto · 134 habitaciones</small>
+        </div>
+      </div>
+      <nav class="nav-modulos" aria-label="Secciones">
+        <a href="index.html">Panel</a>
+        <a href="habitaciones.html" aria-current="page">Habitaciones</a>
+      </nav>
+      <div class="barra-usuario">
+        <div id="avatar" class="avatar" aria-hidden="true"></div>
+        <div class="usuario-datos">
+          <strong id="usuario-nombre">…</strong>
+          <small><span id="usuario-puesto"></span> · <span id="usuario-rol" class="rol"></span></small>
+        </div>
+        <button id="btn-salir" class="btn-secundario">Cerrar sesión</button>
+      </div>
+    </header>
+
+    <main class="contenido">
+      <section class="bienvenida">
+        <div>
+          <h1>Habitaciones</h1>
+          <p id="ayuda-rol" class="muted">Toca una habitación para ver su detalle y cambiar su estado.</p>
+        </div>
+        <div class="acciones">
+          <small id="actualizado" class="muted"></small>
+          <button id="btn-actualizar" class="btn-secundario">↻ Actualizar</button>
+        </div>
+      </section>
+
+      <div id="error" class="alerta alerta-error" role="alert" hidden>
+        <span class="alerta-icono">⚠</span>
+        <div><strong>No se pudieron cargar las habitaciones</strong><p id="error-mensaje"></p></div>
+      </div>
+
+      <section class="seccion filtros" aria-label="Filtros">
+        <div id="filtro-estados" class="filtro-estados" role="group" aria-label="Filtrar por estado"></div>
+        <label class="filtro-piso">
+          <span>Piso</span>
+          <select id="filtro-piso">
+            <option value="">Todos</option>
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+          </select>
+        </label>
+      </section>
+
+      <div id="cargando" class="pantalla-carga dentro">
+        <div class="spinner"></div>
+        <p>Consultando habitaciones en MongoDB Atlas…</p>
+      </div>
+
+      <section id="rack" class="rack" aria-label="Habitaciones por piso" hidden></section>
+    </main>
+  </div>
+
+  <!-- Detalle y cambio de estado -->
+  <dialog id="dlg" class="dlg" aria-labelledby="dlg-titulo">
+    <form method="dialog" class="dlg-cerrar-form"><button class="dlg-cerrar" aria-label="Cerrar">✕</button></form>
+    <header class="dlg-cabecera">
+      <h2 id="dlg-titulo">Habitación</h2>
+      <p id="dlg-sub" class="muted"></p>
+    </header>
+    <dl id="dlg-datos" class="dlg-datos"></dl>
+
+    <form id="form-estado" class="form-estado">
+      <fieldset>
+        <legend>Cambiar a</legend>
+        <div id="opciones-estado" class="opciones-estado"></div>
+        <p id="sin-opciones" class="muted pequeno" hidden></p>
+      </fieldset>
+      <label id="campo-motivo" class="campo" hidden>
+        <span>Motivo del bloqueo</span>
+        <input id="motivo" type="text" maxlength="200" placeholder="ej. Fuga en regadera, cambio de tubería" />
+      </label>
+      <div id="dlg-alerta" class="alerta" role="alert" hidden>
+        <span class="alerta-icono" aria-hidden="true">⚠</span>
+        <div><strong id="dlg-alerta-titulo"></strong><p id="dlg-alerta-mensaje"></p></div>
+      </div>
+      <button id="btn-guardar" class="btn-primario" type="submit" disabled>Guardar cambio</button>
+    </form>
+
+    <section class="dlg-historial">
+      <h3>Últimos cambios guardados</h3>
+      <ol id="historial" class="historial"></ol>
+    </section>
+  </dialog>
+
+  <div id="aviso" class="aviso" role="status" aria-live="polite" hidden></div>
+
+  <script src="js/habitaciones.js" type="module"></script>
+</body>
+</html>
